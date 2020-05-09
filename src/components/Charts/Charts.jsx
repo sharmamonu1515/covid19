@@ -16,21 +16,34 @@ const Charts = () => {
 
   const lineChart = (
     dailyData.length ? (<Line
-      data={{
-        labels: dailyData.map(( { date }) => date),
-        datasets: [{
-          data: dailyData.map(({ confirmed }) => confirmed),
-          label: 'Infected',
-          borderColor: '#3333ff',
-          backgroundColor: 'rgba(0, 0, 255, 0.3)',
-          fill: true
-        }, {
-          data: dailyData.map(({ deaths }) => deaths),
-          label: 'Deaths',
-          borderColor: 'rgba(255, 0, 0, 0.5)',
-          backgroundColor: 'rgba(255, 0, 0, 0.5)',
-          fill: true
-        }]
+      data = {
+        {
+          labels: dailyData.map(( { date }) => date),
+          datasets: [{
+            data: dailyData.map(({ confirmed }) => confirmed),
+            label: 'Infected',
+            borderColor: '#3333ff',
+            backgroundColor: 'rgba(0, 0, 255, 0.3)',
+            fill: true
+          }, {
+            data: dailyData.map(({ deaths }) => deaths),
+            label: 'Deaths',
+            borderColor: 'rgba(255, 0, 0, 0.5)',
+            backgroundColor: 'rgba(255, 0, 0, 0.5)',
+            fill: true
+          }]
+        }}
+      options={{
+        scales:{
+          xAxes: [{
+            display: false //this will remove all the x-axis grid lines
+          }],
+          yAxes: [{
+            gridLines: {
+                drawBorder: false,
+            }
+          }]
+        }
       }}
     />) : null
   );

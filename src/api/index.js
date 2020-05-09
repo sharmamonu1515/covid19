@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-// const url = 'https://api.covid19api.com';
+const url = 'https://corona.lmao.ninja/v2';
 
 export const fetchData = async () => {
   try {
-    const { confirmed, recovered, deaths, lastUpdate } = await fetch(`https://covid19.mathdro.id/api/`)
+    const { cases, recovered, deaths, updated } = await fetch(`${url}/all`)
       .then(response => response.json());
-    return { confirmed, recovered, deaths, lastUpdate }
+    return { cases, recovered, deaths, updated }
   } catch (error) {
 
   }
@@ -28,9 +28,19 @@ export const fetchDailyData = async () => {
 
 export const fetchCountryDetails = async () => {
   try {
-    const { Countries } = await fetch('https://api.covid19api.com/summary').then(response => response.json());
-    return { countries: Countries };
+    return await fetch(`${url}/countries`).then(response => response.json());
   } catch (error) {
     
   }
 }
+
+export const fetchCountries = async () => {
+  try {
+    const { data } = await axios.get('https://api.covid19api.com/countries');
+    return data.map((country) => country.Country);
+  } catch(error) {
+
+  }
+}
+
+// https://documenter.getpostman.com/view/11144369/Szf6Z9B3?version=latest

@@ -38,7 +38,7 @@ function stableSort(array, comparator) {
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: '90%',
+    width: '95%',
     marginTop: '100px'
   },
   paper: {
@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 750,
   },
   visuallyHidden: {
-    border: 0,
+    border: 1,
     clip: 'rect(0 0 0 0)',
     height: 1,
     margin: -1,
@@ -79,13 +79,8 @@ const CountryDetails = () => {
   useEffect(() => {
     const getCountriesDetails = async () => {
       const countriesData = await fetchCountryDetails();
-      const filteredCountries = countriesData.countries.filter(countryData =>
-          countryData.TotalConfirmed > 0 || 
-          countryData.NewConfirmed > 0 ||
-          countryData.TotalDeaths > 0 ||
-          countryData.NewDeaths > 0 ||
-          countryData.TotalRecovered > 0 ||
-          countryData.NewRecovered > 0
+      const filteredCountries = countriesData.filter(countryData =>
+        countryData.cases > 0
       );
       setCountries(filteredCountries);
     }
@@ -94,7 +89,7 @@ const CountryDetails = () => {
 
   const classes = useStyles();
   const [order, setOrder] = React.useState('desc');
-  const [orderBy, setOrderBy] = React.useState('TotalConfirmed');
+  const [orderBy, setOrderBy] = React.useState('cases');
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -104,6 +99,7 @@ const CountryDetails = () => {
 
   return (
     <div className={classes.root}>
+      {/* <input type="search" name="search" /> */}
       <Paper className={classes.paper}>
         <TableContainer>
           <Table className={classes.table}>
@@ -117,26 +113,41 @@ const CountryDetails = () => {
               {stableSort(countries, getComparator(order, orderBy))
                 .map((country, index) => {
                   return (
-                    <TableRow key={country.CountryCode}>
-                      <TableCell align="left">{country.Country}</TableCell>
+                    <TableRow key={country.country}>
+                      <TableCell align="left">{country.country}</TableCell>
                       <TableCell align="left">
-                        {formatNumber(country.TotalConfirmed)}
+                        {formatNumber(country.cases)}
                       </TableCell>
-                      <TableCell align="left" className={country.NewConfirmed > 0 ? classes.newCasesCell : ''}>
-                        {formatNumber(country.NewConfirmed)}{country.NewConfirmed > 0 ? '+' : ''}
-                      </TableCell>
-                      <TableCell align="left">
-                        {formatNumber(country.TotalDeaths)}
-                      </TableCell>
-                      <TableCell align="left" className={country.NewDeaths > 0 ? classes.deathsCell : ''}>
-                        {formatNumber(country.NewDeaths)}{country.NewDeaths > 0 ? '+' : ''}
+                      <TableCell align="left" className={country.todayCases > 0 ? classes.newCasesCell : ''}>
+                        {formatNumber(country.todayCases)}{country.todayCases > 0 ? '+' : ''}
                       </TableCell>
                       <TableCell align="left">
-                        {formatNumber(country.TotalRecovered)}
+                        {formatNumber(country.deaths)}
+                      </TableCell>
+                      <TableCell align="left" className={country.todayDeaths > 0 ? classes.deathsCell : ''}>
+                        {formatNumber(country.todayDeaths)}{country.todayDeaths > 0 ? '+' : ''}
                       </TableCell>
                       <TableCell align="left">
-                        {formatNumber(country.NewRecovered)}
+                        {formatNumber(country.recovered)}
                       </TableCell>
+                      <TableCell align="left">
+                        {formatNumber(country.active)}
+                      </TableCell>
+                      <TableCell align="left">
+                        {formatNumber(country.critical)}
+                      </TableCell>
+                      <TableCell align="left">
+                        {formatNumber(country.casesPerOneMillion)}
+                      </TableCell>
+                      <TableCell align="left">
+                        {formatNumber(country.deathsPerOneMillion)}
+                      </TableCell>
+                      {/* <TableCell align="left">
+                        {formatNumber(country.tests)}
+                      </TableCell>
+                      <TableCell align="left">
+                        {formatNumber(country.testsPerOneMillion)}
+                      </TableCell> */}
                     </TableRow>
                   );
                 })}

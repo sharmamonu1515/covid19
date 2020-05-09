@@ -9,13 +9,18 @@ import PropTypes from 'prop-types';
 function TableHeader(props) {
 
   const headCells = [
-    { id: 'Country', numeric: false, label: 'Country' },
-    { id: 'TotalConfirmed', numeric: true, label: 'Total Cases' },
-    { id: 'NewConfirmed', numeric: true, label: 'New Cases' },
-    { id: 'TotalDeaths', numeric: true, label: 'Total Deaths' },
-    { id: 'NewDeaths', numeric: true, label: 'New Deaths' },
-    { id: 'TotalRecovered', numeric: true, label: 'Total Recovered' },
-    { id: 'NewRecovered', numeric: true, label: 'New Recovered' },
+    { id: 'country', numeric: false, label: 'Country' },
+    { id: 'cases', numeric: true, label: 'Total Cases' },
+    { id: 'todayCases', numeric: true, label: 'New Cases' },
+    { id: 'deaths', numeric: true, label: 'Total Deaths' },
+    { id: 'todayDeaths', numeric: true, label: 'New Deaths' },
+    { id: 'recovered', numeric: true, label: 'Total Recovered' },
+    { id: 'active', numeric: true, label: 'Active Cases' },
+    { id: 'critical', numeric: true, label: 'Serious' },
+    { id: 'casesPerOneMillion', numeric: true, label: 'Total Cases / Per 1M' },
+    { id: 'deathsPerOneMillion', numeric: true, label: 'Deaths / Per 1M' },
+    // { id: 'tests', numeric: true, label: 'Tests' },
+    // { id: 'testsPerOneMillion', numeric: true, label: 'Tests / Per 1M' },
   ];
 
   const { classes, order, orderBy, onRequestSort } = props;

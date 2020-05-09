@@ -7,24 +7,24 @@ import styles from "./Cards.module.css";
 
 const Cards = (props) => {
 
-  const { data:  { confirmed, recovered, deaths, lastUpdate } }= props;
+  const { data:  { cases, recovered, deaths, updated } }= props;
 
-  if (!confirmed) { return  'Loading...'; }
+  if (!cases) { return  'Loading...'; }
   
   const displayData = [
     {
       type: 'infected',
-      total: confirmed.value,
+      total: cases,
       description: 'Number of active cases of COVID-19'
     },
     {
       type: 'recovered',
-      total: recovered.value,
+      total: recovered,
       description: 'Number of recovered cases of COVID-19'
     },
     {
       type: 'deaths',
-      total: deaths.value,
+      total: deaths,
       description: 'Number of deaths caused by COVID-19'
     }
   ];
@@ -36,11 +36,11 @@ const Cards = (props) => {
           displayData.map( (data, index) => (
             <Grid key={index} item component={Card} xs={12} md={3} className={cx(styles.card, styles[data['type']])}>
               <CardContent>
-                <Typography color="textSecondary" gutterBottom>{data.type}</Typography>
+                <Typography color="textSecondary" className={styles.cardLabel} gutterBottom>{data.type}</Typography>
                 <Typography variant="h5">
                   <CountUp start={0} end={data.total} duration={2.5} separator="," />
                 </Typography>
-                <Typography color="textSecondary">{new Date(lastUpdate).toDateString()}</Typography>
+                <Typography color="textSecondary">{new Date(updated).toDateString()}</Typography>
                 <Typography variant="body2">
                   {data.description}
                 </Typography>
