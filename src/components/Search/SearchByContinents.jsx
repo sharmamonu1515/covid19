@@ -12,7 +12,10 @@ const SearchByContinents = (props) => {
     { label: 'South America', value: 'South America' },
   ];
 
-  return continents.map((continent, i) => (<Button key={i} variant="contained" size="small" className={props.classes.margin} color="primary" onClick={(e) => props.filterByContinent(continent.value) }>{continent.label}</Button>))
+  return continents.map((continent, i) => (
+    <Button key={i} variant={continent.value === props.active ? 'outlined' : 'contained'} size="small" className={props.classes.margin} color="primary" onClick={(e) => props.filterByContinent(continent.value)}>{continent.label}</Button>
+    )
+  )
 }
 
 export default SearchByContinents;

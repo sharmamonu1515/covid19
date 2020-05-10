@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -11,6 +11,8 @@ import SearchByCountry from '../Search/SearchByCountry';
 import SearchByContinents from '../Search/SearchByContinents';
 
 import { fetchCountryDetails } from '../../api';
+
+import styles from './CountryDetails.module.css';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -69,6 +71,9 @@ const useStyles = makeStyles((theme) => ({
     top: 20,
     width: 1,
   },
+  success: {
+    backgroundColor: 'rgba(118, 251, 118, 0.25)'
+  },
   deathsCell: {
     backgroundColor: 'red',
     color: '#fff',
@@ -87,10 +92,14 @@ function formatNumber(number) {
 }
 
 const CountryDetails = () => {
-  const [ countries, setCountries ] = useState([]);
-  const [ countriesCopy, setCountriesCopy ] = useState([]);
-  
-  useEffect(() => {
+  const [ countries, setCountries ] = React.useState([]);
+  const [ countriesCopy, setCountriesCopy ] = React.useState([]);
+  const [activeContinent, setActiveContinent] = React.useState('All');
+  const [order, setOrder] = React.useState('desc');
+  const [orderBy, setOrderBy] = React.useState('cases');
+  const classes = useStyles();
+
+  React.useEffect(() => {
     const getCountriesDetails = async () => {
       const countriesData = await fetchCountryDetails();
       const filteredCountries = countriesData.filter(countryData =>
@@ -101,10 +110,6 @@ const CountryDetails = () => {
     }
     getCountriesDetails();
   }, []);
-
-  const classes = useStyles();
-  const [order, setOrder] = React.useState('desc');
-  const [orderBy, setOrderBy] = React.useState('cases');
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -139,14 +144,15 @@ const CountryDetails = () => {
       });
     }
     setCountries(filteredCountries);
+    setActiveContinent(value);
   }
 
   return (
     <div className={classes.root}>
-     <SearchByContinents filterByContinent={filterByContinent} classes={classes} />
+     <SearchByContinents filterByContinent={filterByContinent} classes={classes} active={activeContinent} />
       <SearchByCountry filterCountries={filterCountries} className={classes.margin} />
       <Paper className={classes.paper}>
-        <TableContainer>
+        <TableContainer className={styles.tableContainer}>
           <Table className={classes.table} border={1} bordercolor="#e0e0e0">
             <TableHeader
               classes={classes}
@@ -158,7 +164,7 @@ const CountryDetails = () => {
               {stableSort(countries, getComparator(order, orderBy))
                 .map((country, index) => {
                   return (
-                    <TableRow key={country.country}>
+                    <TableRow key={country.country} className={country.cases === country.recovered ? classes.success : ''}>
                       <TableCell align="left">{country.country}</TableCell>
                       <TableCell align="left">
                         {formatNumber(country.cases)}
