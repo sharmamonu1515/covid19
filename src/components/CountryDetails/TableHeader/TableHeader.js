@@ -41,6 +41,7 @@ function TableHeader(props) {
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : 'asc'}
               onClick={createSortHandler(headCell.id)}
+              className={classes.tableHead}
             >
               {headCell.label}
               {orderBy === headCell.id ? (

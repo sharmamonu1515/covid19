@@ -7,6 +7,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import TableHeader from './TableHeader/TableHeader';
+import SearchByCountry from '../Search/SearchByCountry';
+import SearchByContinents from '../Search/SearchByContinents';
 
 import { fetchCountryDetails } from '../../api';
 
@@ -44,9 +46,17 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     width: '100%',
     marginBottom: theme.spacing(2),
+    marginTop: theme.spacing(2),
+  },
+  tableHead: {
+    fontWeight: 'bold',
+    color: '#000',
+    '&:hover': {
+      color: 'rgba(0, 0, 0, 0.7)'
+    }
   },
   table: {
-    minWidth: 750,
+    minWidth: 750
   },
   visuallyHidden: {
     border: 1,
@@ -66,16 +76,20 @@ const useStyles = makeStyles((theme) => ({
   },
   newCasesCell: {
     backgroundColor: '#ffd68b',
+  },
+  margin: {
+    margin: theme.spacing(1),
   }
 }));
 
 function formatNumber(number) {
-  return new Intl.NumberFormat().format(number);
+  return number ? new Intl.NumberFormat().format(number) : '';
 }
 
 const CountryDetails = () => {
   const [ countries, setCountries ] = useState([]);
-
+  const [ countriesCopy, setCountriesCopy ] = useState([]);
+  
   useEffect(() => {
     const getCountriesDetails = async () => {
       const countriesData = await fetchCountryDetails();
@@ -83,6 +97,7 @@ const CountryDetails = () => {
         countryData.cases > 0
       );
       setCountries(filteredCountries);
+      setCountriesCopy(filteredCountries);
     }
     getCountriesDetails();
   }, []);
@@ -97,12 +112,42 @@ const CountryDetails = () => {
     setOrderBy(property);
   };
 
+  const filterCountries = (value) => {
+    let filteredCountries = [];
+    if (value === '') {
+      filteredCountries = countriesCopy;
+    } else {
+      const search = value.toLowerCase();
+      filteredCountries = countriesCopy.slice().filter(country => {
+        return ((country.country.toLowerCase().includes(search)) ||
+          (country.continent && country.continent.toLowerCase().includes(search)) ||
+          (country.countryInfo.iso2 && country.countryInfo.iso2.toLowerCase().includes(search)) ||
+          (country.countryInfo.iso3 && country.countryInfo.iso3.toLowerCase().includes(search))
+        );
+      });
+    }
+    setCountries(filteredCountries);
+  }
+
+  const filterByContinent = (value) => {
+    let filteredCountries = [];
+    if (value === 'All') {
+      filteredCountries = countriesCopy;
+    } else {
+      filteredCountries = countriesCopy.slice().filter(country => {
+        return country.continent && country.continent === value;
+      });
+    }
+    setCountries(filteredCountries);
+  }
+
   return (
     <div className={classes.root}>
-      {/* <input type="search" name="search" /> */}
+     <SearchByContinents filterByContinent={filterByContinent} classes={classes} />
+      <SearchByCountry filterCountries={filterCountries} className={classes.margin} />
       <Paper className={classes.paper}>
         <TableContainer>
-          <Table className={classes.table} stickyHeader aria-label="sticky table">
+          <Table className={classes.table} border={1} bordercolor="#e0e0e0">
             <TableHeader
               classes={classes}
               order={order}
@@ -118,14 +163,14 @@ const CountryDetails = () => {
                       <TableCell align="left">
                         {formatNumber(country.cases)}
                       </TableCell>
-                      <TableCell align="left" className={country.todayCases > 0 ? classes.newCasesCell : ''}>
-                        {formatNumber(country.todayCases)}{country.todayCases > 0 ? '+' : ''}
+                      <TableCell align="left" className={country.todayCases ? classes.newCasesCell : ''}>
+                        {country.todayCases ? formatNumber(country.todayCases) + '+' : ''}
                       </TableCell>
                       <TableCell align="left">
                         {formatNumber(country.deaths)}
                       </TableCell>
-                      <TableCell align="left" className={country.todayDeaths > 0 ? classes.deathsCell : ''}>
-                        {formatNumber(country.todayDeaths)}{country.todayDeaths > 0 ? '+' : ''}
+                      <TableCell align="left" className={country.todayDeaths ? classes.deathsCell : ''}>
+                        {country.todayDeaths ? formatNumber(country.todayDeaths) + '+' : ''}
                       </TableCell>
                       <TableCell align="left">
                         {formatNumber(country.recovered)}
