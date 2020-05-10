@@ -102,7 +102,7 @@ const CountryDetails = () => {
       {/* <input type="search" name="search" /> */}
       <Paper className={classes.paper}>
         <TableContainer>
-          <Table className={classes.table}>
+          <Table className={classes.table} stickyHeader aria-label="sticky table">
             <TableHeader
               classes={classes}
               order={order}
