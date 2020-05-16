@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./App.module.css";
 
-import { Cards, Charts, CountryPicker, CountryDetails } from "./components";
+import { Cards, Charts, CountryDetails } from "./components";
 
 import { fetchData } from "./api";
 
@@ -26,7 +26,6 @@ class App extends React.Component {
     return (
       <div className={styles.container}>
         <Cards data={data}/>
-        <CountryPicker handleCountryChange={this.handleCountryChange} />
         <Charts />
         <CountryDetails />
       </div>

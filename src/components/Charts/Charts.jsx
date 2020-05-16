@@ -5,7 +5,7 @@ import { ResponsiveLine } from "@nivo/line";
 import styles from "./Charts.module.css";
 
 const Charts = () => {
-  const [dailyData, setDailyData] = useState([]);
+  const [dailyData, setDailyData] = useState(false);
 
   useEffect(() => {
     const fetchApi = async () => {
@@ -14,7 +14,7 @@ const Charts = () => {
     fetchApi();
   }, []);
 
-  if (!dailyData && !data.length) return "Loading...";
+  if (!dailyData) return "Loading...";
   const confirmedCases = dailyData.map((data) => {
     return { x: data.date, y: data.confirmed };
   });
@@ -26,7 +26,7 @@ const Charts = () => {
   const data = [
     {
       id: "Total Deaths",
-      color: "hsl(0, 50%, 50%)",
+      color: "hsl(0, 100%, 50%)",
       data: deaths,
     },
     {
@@ -54,6 +54,7 @@ const Charts = () => {
         axisTop={null}
         axisRight={null}
         axisBottom={null}
+        colors={data => data.color}
         axisLeft={{
           orient: "left",
           tickSize: 5,
@@ -68,7 +69,7 @@ const Charts = () => {
         pointSize={5}
         pointBorderWidth={2}
         pointLabelYOffset={-12}
-        areaOpacity={0.1}
+        // areaOpacity={0.1}
         crosshairType="x"
         useMesh={true}
         legends={[
@@ -85,15 +86,6 @@ const Charts = () => {
             itemOpacity: 0.75,
             symbolSize: 9,
             symbolShape: "circle",
-            effects: [
-              {
-                on: "hover",
-                style: {
-                  itemBackground: "rgba(0, 0, 0, .03)",
-                  itemOpacity: 1,
-                },
-              },
-            ],
           },
         ]}
       />
