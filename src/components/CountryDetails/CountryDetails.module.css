@@ -1,3 +1,17 @@
 .tableContainer {
   overflow-x: auto;
 }
+
+.mapMarkers {
+  display: grid;
+  align-items: center;
+  padding: 5px;
+  justify-content: center;
+  text-align: center;
+  grid-gap: 5px;
+}
+
+.mapMarkers span {
+  font-size: 16px;
+  color: red;
+}

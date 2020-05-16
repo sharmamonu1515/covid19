@@ -36,8 +36,8 @@ const Cards = (props) => {
           displayData.map( (data, index) => (
             <Grid key={index} item component={Card} xs={12} md={3} className={cx(styles.card, styles[data['type']])}>
               <CardContent>
-                <Typography color="textSecondary" className={styles.cardLabel} gutterBottom>{data.type}</Typography>
-                <Typography variant="h5">
+                <Typography color="textPrimary" className={styles.cardLabel} gutterBottom>{data.type}</Typography>
+                <Typography variant="h5" gutterBottom>
                   <CountUp start={0} end={data.total} duration={2.5} separator="," />
                 </Typography>
                 <Typography color="textSecondary">{new Date(updated).toDateString()}</Typography>

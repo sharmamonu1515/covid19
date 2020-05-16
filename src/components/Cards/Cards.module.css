@@ -3,30 +3,34 @@
 }
 
 .container .card {
-  margin: 0 2%;
+  margin: 0 3% 2% 3%;
 }
 
 .infected {
-  border-bottom: 10px solid rgba(0, 0, 255);
-  border-top: 1px solid rgba(0, 0, 255, 0.5);
-  border-left: 1px solid rgba(0, 0, 255, 0.5);
-  border-right: 1px solid rgba(0, 0, 255, 0.5);
+  border-bottom: 10px solid rgb(0, 0, 255);
 }
 
 .recovered {
-  border-bottom: 10px solid rgba(0, 255, 0);
-  border-top: 1px solid rgba(0, 255, 0, 0.5);
-  border-right: 1px solid rgba(0, 255, 0, 0.5);
-  border-left: 1px solid rgba(0, 255, 0, 0.5);
+  border-bottom: 10px solid rgb(10, 187, 10);
 }
 
 .deaths {
-  border-bottom: 10px solid rgba(255, 0, 0);
-  border-top: 1px solid rgba(255, 0, 0, 0.5);
-  border-left: 1px solid rgba(255, 0, 0, 0.5);
-  border-right: 1px solid rgba(255, 0, 0, 0.5);
+  border-bottom: 10px solid rgb(255, 0, 0);
 }
 
-.cardLabel {
+.container .cardLabel {
   text-transform: capitalize;
+  font-size: 1.5rem;
+}
+
+.infected .cardLabel {
+  color: rgb(0, 0, 255);
+}
+
+.recovered .cardLabel {
+  color: rgb(10, 187, 10);
+}
+
+.deaths .cardLabel {
+  color: rgb(255, 0, 0);
 }

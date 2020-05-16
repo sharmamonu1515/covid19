@@ -4,7 +4,7 @@ const url = 'https://corona.lmao.ninja/v2';
 
 export const fetchData = async () => {
   try {
-    const { cases, recovered, deaths, updated } = await fetch(`${url}/all`)
+    const { cases, recovered, deaths, updated } = await fetch(`${url}/all?yesterday`)
       .then(response => response.json());
     return { cases, recovered, deaths, updated }
   } catch (error) {
