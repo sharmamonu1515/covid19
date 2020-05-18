@@ -10,23 +10,9 @@ import TableHeader from "./TableHeader/TableHeader";
 import SearchByCountry from "../Search/SearchByCountry";
 import SearchByContinents from "../Search/SearchByContinents";
 
-import Leaflet from "leaflet";
-import { Map, TileLayer, Marker, Popup } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-
 import { fetchCountryDetails } from "../../api";
 
 import styles from "./CountryDetails.module.css";
-
-Leaflet.Icon.Default.imagePath = "../node_modules/leaflet";
-
-delete Leaflet.Icon.Default.prototype._getIconUrl;
-
-Leaflet.Icon.Default.mergeOptions({
-  iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
-  iconUrl: require("leaflet/dist/images/marker-icon.png"),
-  shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
-});
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -168,29 +154,17 @@ const CountryDetails = () => {
     setActiveContinent(value);
   };
 
-  const mapMarkers = countriesCopy.map((country) => {
-    return (
-      <Marker
-        key={country.country}
-        position={{
-          lat: country.countryInfo.lat,
-          lng: country.countryInfo.long,
-        }}
-      >
-        <Popup>
-          <div className={styles.mapMarkers}>
-            <img src={country.countryInfo.flag} width="80px" title={country.country} alt="flag" />
-            <span>{formatNumber(country.cases)}</span>
-          </div>
-        </Popup>
-      </Marker>
-    );
-  });
-
   return (
     <div className={classes.root}>
-     <SearchByContinents filterByContinent={filterByContinent} classes={classes} active={activeContinent} />
-      <SearchByCountry filterCountries={filterCountries} className={classes.margin} />
+      <SearchByContinents
+        filterByContinent={filterByContinent}
+        classes={classes}
+        active={activeContinent}
+      />
+      <SearchByCountry
+        filterCountries={filterCountries}
+        className={classes.margin}
+      />
       <Paper className={classes.paper}>
         <TableContainer className={styles.tableContainer}>
           <Table className={classes.table} border={1} bordercolor="#e0e0e0">
@@ -201,59 +175,81 @@ const CountryDetails = () => {
               onRequestSort={handleRequestSort}
             />
             <TableBody>
-              {stableSort(countries, getComparator(order, orderBy))
-                .map((country, index) => {
-                  return (
-                    <TableRow key={country.country} className={country.cases === country.recovered ? classes.success : ''}>
-                      <TableCell align="left">{country.country}</TableCell>
-                      <TableCell align="left">
-                        {formatNumber(country.cases)}
-                      </TableCell>
-                      <TableCell align="left" className={country.todayCases ? classes.newCasesCell : ''}>
-                        {country.todayCases ? formatNumber(country.todayCases) + '+' : ''}
-                      </TableCell>
-                      <TableCell align="left">
-                        {formatNumber(country.deaths)}
-                      </TableCell>
-                      <TableCell align="left" className={country.todayDeaths ? classes.deathsCell : ''}>
-                        {country.todayDeaths ? formatNumber(country.todayDeaths) + '+' : ''}
-                      </TableCell>
-                      <TableCell align="left">
-                        {formatNumber(country.recovered)}
-                      </TableCell>
-                      <TableCell align="left">
-                        {formatNumber(country.active)}
-                      </TableCell>
-                      <TableCell align="left">
-                        {formatNumber(country.critical)}
-                      </TableCell>
-                      <TableCell align="left">
-                        {formatNumber(country.casesPerOneMillion)}
-                      </TableCell>
-                      <TableCell align="left">
-                        {formatNumber(country.deathsPerOneMillion)}
-                      </TableCell>
-                      {/* <TableCell align="left">
+              {countries.length ? (
+                stableSort(countries, getComparator(order, orderBy)).map(
+                  (country, index) => {
+                    return (
+                      <TableRow
+                        key={country.country}
+                        className={
+                          country.cases === country.recovered
+                            ? classes.success
+                            : ""
+                        }
+                      >
+                        <TableCell align="left">{country.country}</TableCell>
+                        <TableCell align="left">
+                          {formatNumber(country.cases)}
+                        </TableCell>
+                        <TableCell
+                          align="left"
+                          className={
+                            country.todayCases ? classes.newCasesCell : ""
+                          }
+                        >
+                          {country.todayCases
+                            ? formatNumber(country.todayCases) + "+"
+                            : ""}
+                        </TableCell>
+                        <TableCell align="left">
+                          {formatNumber(country.deaths)}
+                        </TableCell>
+                        <TableCell
+                          align="left"
+                          className={
+                            country.todayDeaths ? classes.deathsCell : ""
+                          }
+                        >
+                          {country.todayDeaths
+                            ? formatNumber(country.todayDeaths) + "+"
+                            : ""}
+                        </TableCell>
+                        <TableCell align="left">
+                          {formatNumber(country.recovered)}
+                        </TableCell>
+                        <TableCell align="left">
+                          {formatNumber(country.active)}
+                        </TableCell>
+                        <TableCell align="left">
+                          {formatNumber(country.critical)}
+                        </TableCell>
+                        <TableCell align="left">
+                          {formatNumber(country.casesPerOneMillion)}
+                        </TableCell>
+                        <TableCell align="left">
+                          {formatNumber(country.deathsPerOneMillion)}
+                        </TableCell>
+                        {/* <TableCell align="left">
                         {formatNumber(country.tests)}
                       </TableCell>
                       <TableCell align="left">
                         {formatNumber(country.testsPerOneMillion)}
                       </TableCell> */}
-                    </TableRow>
-                  );
-                })}
+                      </TableRow>
+                    );
+                  }
+                )
+              ) : (
+                <TableRow>
+                  <TableCell align="left" colSpan={10}>
+                    Loading...
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </TableContainer>
       </Paper>
-
-      <Map center={{ lat: 33, lng: 65 }} zoom={3}>
-        <TileLayer
-          attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-          url="https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}{r}.png"
-      />
-        { mapMarkers }
-      </Map>
     </div>
   );
 };
