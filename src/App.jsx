@@ -21,11 +21,11 @@ class App extends React.Component {
 	render() {
 		const { data } = this.state;
     return (
-      <BrowserRouter>
+      <BrowserRouter basename={'/covid19'}>
         <div className={styles.container}>
           <Header />
           <Cards data={data} />
-          <Route path="/" exact  component={CountryDetails} /> 
+          <Route path="/" exact component={CountryDetails} /> 
           <Route path="/charts" component={Charts} /> 
           <Route path="/map" component={MapView} /> 
         </div>
