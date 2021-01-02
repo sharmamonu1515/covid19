@@ -1,6 +1,6 @@
 Project is related to covid-19 tracker which uses the covid-19 API's, You can view data by country, continent, search by country and view infected, recovered, deaths due to this pendamic.
 
-### Visulization
+### visualization
 This app uses charts and Leaflet map for better visualization.
 
 ---
